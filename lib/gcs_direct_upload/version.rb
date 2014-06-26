@@ -1,3 +1,3 @@
-module S3DirectUpload
+module GcsDirectUpload
   VERSION = "0.1.7"
 end

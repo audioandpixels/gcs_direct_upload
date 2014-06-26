@@ -1,6 +1,6 @@
 require "singleton"
 
-module S3DirectUpload
+module GcsDirectUpload
   class Config
     include Singleton
 

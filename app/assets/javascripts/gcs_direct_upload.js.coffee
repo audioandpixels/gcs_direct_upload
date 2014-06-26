@@ -3,12 +3,12 @@
 
 $ = jQuery
 
-$.fn.S3Uploader = (options) ->
+$.fn.GcsUploader = (options) ->
 
   # support multiple elements
   if @length > 1
     @each ->
-      $(this).S3Uploader options
+      $(this).GcsUploader options
 
     return this
 
@@ -56,7 +56,7 @@ $.fn.S3Uploader = (options) ->
             data.submit()
 
       start: (e) ->
-        $uploadForm.trigger("s3_uploads_start", [e])
+        $uploadForm.trigger("gcs_uploads_start", [e])
 
       progress: (e, data) ->
         if data.context
@@ -92,17 +92,17 @@ $.fn.S3Uploader = (options) ->
               return event.result
 
         data.context.remove() if data.context && settings.remove_completed_progress_bar # remove progress bar
-        $uploadForm.trigger("s3_upload_complete", [content])
+        $uploadForm.trigger("gcs_upload_complete", [content])
 
         current_files.splice($.inArray(data, current_files), 1) # remove that element from the array
-        $uploadForm.trigger("s3_uploads_complete", [content]) unless current_files.length
+        $uploadForm.trigger("gcs_uploads_complete", [content]) unless current_files.length
 
       fail: (e, data) ->
         content = build_content_object $uploadForm, data.files[0], data.result
         content.error_thrown = data.errorThrown
 
         data.context.remove() if data.context && settings.remove_failed_progress_bar # remove progress bar
-        $uploadForm.trigger("s3_upload_failed", [content])
+        $uploadForm.trigger("gcs_upload_failed", [content])
 
       formData: (form) ->
         data = form.serializeArray()
@@ -133,7 +133,7 @@ $.fn.S3Uploader = (options) ->
 
   build_content_object = ($uploadForm, file, result) ->
     content = {}
-    if result # Use the S3 response to set the URL to avoid character encodings bugs
+    if result # Use the gcs response to set the URL to avoid character encodings bugs
       content.url            = $(result).find("Location").text()
       content.filepath       = $('<a />').attr('href', content.url)[0].pathname
     else # IE <= 9 retu      rn a null result object so we use the file object instead

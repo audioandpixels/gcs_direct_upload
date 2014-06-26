@@ -1,7 +1,7 @@
-module S3DirectUpload
+module GcsDirectUpload
   module UploadHelper
-    def s3_uploader_form(options = {}, &block)
-      uploader = S3Uploader.new(options)
+    def gcs_uploader_form(options = {}, &block)
+      uploader = GcsUploader.new(options)
       form_tag(uploader.url, uploader.form_options) do
         uploader.fields.map do |name, value|
           hidden_field_tag(name, value)
@@ -9,15 +9,15 @@ module S3DirectUpload
       end
     end
 
-    class S3Uploader
+    class GcsUploader
       def initialize(options)
         @key_starts_with = options[:key_starts_with] || "uploads/"
         @options = options.reverse_merge(
-          aws_access_key_id: S3DirectUpload.config.access_key_id,
-          aws_secret_access_key: S3DirectUpload.config.secret_access_key,
-          bucket: options[:bucket] || S3DirectUpload.config.bucket,
-          region: S3DirectUpload.config.region || "s3",
-          url: S3DirectUpload.config.url,
+          gcs_access_key_id: GcsDirectUpload.config.access_key_id,
+          gcs_secret_access_key: GcsDirectUpload.config.secret_access_key,
+          bucket: options[:bucket] || GcsDirectUpload.config.bucket,
+          region: GcsDirectUpload.config.region || "gcs",
+          url: GcsDirectUpload.config.url,
           ssl: true,
           acl: "public-read",
           expiration: 10.hours.from_now.utc.iso8601,
@@ -48,7 +48,7 @@ module S3DirectUpload
         {
           :key => @options[:key] || key,
           :acl => @options[:acl],
-          "AWSAccessKeyId" => @options[:aws_access_key_id],
+          "AWSAccessKeyId" => @options[:gcs_access_key_id],
           :policy => policy,
           :signature => signature,
           :success_action_status => "201",
@@ -61,6 +61,7 @@ module S3DirectUpload
       end
 
       def url
+        #TODO: update url
         @options[:url] || "http#{@options[:ssl] ? 's' : ''}://#{@options[:region]}.amazonaws.com/#{@options[:bucket]}/"
       end
 
@@ -88,7 +89,7 @@ module S3DirectUpload
         Base64.encode64(
           OpenSSL::HMAC.digest(
             OpenSSL::Digest.new('sha1'),
-            @options[:aws_secret_access_key], policy
+            @options[:gcs_secret_access_key], policy
           )
         ).gsub("\n", "")
       end
