@@ -61,8 +61,7 @@ module GcsDirectUpload
       end
 
       def url
-        #TODO: update url
-        @options[:url] || "http#{@options[:ssl] ? 's' : ''}://#{@options[:region]}.amazonaws.com/#{@options[:bucket]}/"
+        @options[:url] || "http#{@options[:ssl] ? 's' : ''}://storage.googleapis.com/#{@options[:bucket]}/"
       end
 
       def policy

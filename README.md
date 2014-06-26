@@ -25,18 +25,16 @@ S3DirectUpload.config do |c|
 end
 ```
 
-Make sure your AWS S3 CORS settings for your bucket look something like this:
-```xml
-<CORSConfiguration>
-    <CORSRule>
-        <AllowedOrigin>http://0.0.0.0:3000</AllowedOrigin>
-        <AllowedMethod>GET</AllowedMethod>
-        <AllowedMethod>POST</AllowedMethod>
-        <AllowedMethod>PUT</AllowedMethod>
-        <MaxAgeSeconds>3000</MaxAgeSeconds>
-        <AllowedHeader>*</AllowedHeader>
-    </CORSRule>
-</CORSConfiguration>
+Use gsutil to set your CORS policy, eg. gsutil cors set cors-json-file.json gs://example
+```json
+[
+    {
+      "origin": ["http://example.appspot.com"],
+      "responseHeader": ["x-meta-goog-custom"],
+      "method": ["GET", "POST", "PUT"],
+      "maxAgeSeconds": 3600
+    }
+]
 ```
 In production the AllowedOrigin key should be your domain.
 
