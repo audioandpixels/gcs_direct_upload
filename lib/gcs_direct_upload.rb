@@ -5,7 +5,7 @@ require 'base64'
 require 'openssl'
 require 'digest/sha1'
 
-require 'gcs_direct_upload/config_aws'
+require 'gcs_direct_upload/config_gcs'
 require 'gcs_direct_upload/form_helper'
 require 'gcs_direct_upload/engine' if defined?(Rails)
 require 'gcs_direct_upload/railtie' if defined?(Rails)
