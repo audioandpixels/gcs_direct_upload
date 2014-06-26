@@ -48,7 +48,7 @@ module GcsDirectUpload
         {
           :key => @options[:key] || key,
           :acl => @options[:acl],
-          "AWSAccessKeyId" => @options[:gcs_access_key_id],
+          "GoogleAccessID" => @options[:gcs_access_key_id],
           :policy => policy,
           :signature => signature,
           :success_action_status => "201",
